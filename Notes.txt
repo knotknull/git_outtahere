@@ -1,0 +1,148 @@
+git is a Distributed Version Control System (repo)
+
+All changes done to local repo and sync to remote repo
+
+NOTE: examples at
+https://github.com/brentlaster/safaridocs/
+https://github.com/brentlaster/safaridocs/blob/master/next-level-git-labs-2017.pdf
+
+Unit of granularity, usually a tree
+
+Set default editor:
+git config core.editor vim or
+git config core.editor atom
+
+## What is a fast forward:
+##
+  - you have three existing branches
+  - want to merge a hotfix into master
+
+  git checkout master
+  git merge hotfix
+
+  NOTE: this moves the master pointer to the hotfix branch
+
+## What is 3 way merge:
+  Looks at common master and the tips of two branches and merges
+  both branches together
+
+## Rebase
+##
+
+Take all changes on one branch and reply on another
+ - looks at common
+ - figures out feature difference and applies to common master
+
+
+## Stash
+##
+  allow you to keep a backup copoy of work that hasn't been committed
+  copy off to side and allow you to change work
+
+  git stash create
+  git stash clear
+  git stash drop
+  git stash list
+  git stash store
+
+  git stash apply
+  git stash pop
+
+
+## Reset
+##
+allow you to roll back so that branch points at a previous commit
+
+git reset
+
+
+
+## Revert
+##
+  allow you to undo by adding a new change that cancels
+  out previous changes
+
+git revert
+
+reason for a git revert is if you have already put content out to
+the remote repo already, hence others may have taken in the updates
+already.
+
+ex.
+git reset current~1  ## reset head to one prior (~1 prior version)
+
+
+## ReReRe : Reuse Recorded Resolution
+
+Teach git how to merge conflicts.  Allows recording of how you solve a
+merge situation sand then automatically resolve the same situation
+in the same way if needed later.
+
+git rerere [clear | forget | diff | remaining | status | gc]
+
+NOTE: This is a state command i.e. git config --global rerere.enabled 1
+
+rebase vs. rerere:  rebase rewrites history, rerere rmpeated merges
+
+## Bisect
+##
+Use automated binary search through git's history to find a specific
+commit that first introduced a problem. ("first bad commit").  Git
+will do a binary search to find first bad commit
+
+git bisect start
+git bisect start HEAD HEAD~10
+git bisect bad   # identify bad commit
+git bisect good  # identify good commit
+git bad ^  # grab previous good revision "^" == one back revision
+
+
+Can alternate between good / bad to find bad first version
+git bisect start  # earlier version
+git bisect bad    # checks out ver 10
+git bisect good   # checks out ver 5
+git bisect good   # checks out ver 7
+git bisect bad    # checks out ver 6
+git bisect bad    # First bad commit is version 6
+
+You go thru the version bisecting your way until you hit the bad
+version.  You can then mark that version prior to the first bad
+(i.e. the last good version):
+
+> git bisect bad
+d017dd2f4b1c3ee1e5fb1389ca165a9e63910221 is the first bad commit
+commit d017dd2f4b1c3ee1e5fb1389ca165a9e63910221
+Author: Brent Laster <Brent.Laster@sas.com>
+Date:   Sun Jun 24 17:23:50 2012 -0400
+
+   Commit of version 7 of sum.sh
+
+:100755 100755 dd8cb83d94757fa5e1f6c192c5b8b0556622f242 41b24dec0db17a0b54fde52eeee1924f69df423a M	sum.sh
+
+
+> git bisect reset refs/bisect/bad^
+Previous HEAD position was d017dd2... Commit of version 7 of sum.sh
+HEAD is now at a574e82... Commit of version 6 of sum.sh
+
+> git checkout -b gooddy
+Switched to a new branch 'gooddy'
+
+> git log --oneline
+a574e82 Commit of version 6 of sum.sh
+5f9e9f6 Commit of version 5 of sum.sh
+792688b Commit of version 4 of sum.sh
+97e7d19 Commit of version 3 of sum.sh
+8fce596 Commit of version 2 of sum.sh
+d9d9585 Commit of version 1 of sum.sh
+
+
+
+
+
+
+
+
+
+
+
+##
