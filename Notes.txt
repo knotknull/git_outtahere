@@ -137,6 +137,64 @@ d9d9585 Commit of version 1 of sum.sh
 
 
 
+## Switching between branches
+## Worktrees
+##
+
+git checkout master
+git branch   ## master
+git checkout testing
+git branch   ## testing
+
+Separate working directories for each branch:  git worktree
+(Work in several branches at the same time)
+
+git worktree add       # create separate working tree
+git worktree list      # list out current set of working trees
+git worktree prune     # removes worktree infor from .git area
+
+NOTE: traditional working directory is called main working tree.
+working tree info stored in .git/worktrees/<name of worktree>
+
+ex. git worktree add -b exp tree1  # creates worktree named tree1 of branch exp
+    git worktree add -b prod tree2  # creates worktree named tree1 of branch exp
+
+
+
+
+## Submodule: Submodule is another git repo in a sup-directory
+##
+Submodule:  allow separate repo with you current repo
+creates a subdirectory off of your original repository
+original repo is called superproject
+metadata stored in .gitmodules
+
+Challenges:
+  - keeping submodule content, and current commit, in sync with
+    submodule references in superproject
+
+  - if references are wrong, submodule can "backlevel"
+
+  - if references are out of sync and it is pushed then other users
+    can wind up "backleveling"  [[!! GACKKK !!]]
+
+
+## Subtrees
+## Allows you to include a separate repo within your current repo.
+## use case: include a copy of a git repo for one or more dependencies
+## along with the original repo
+##
+## NOTE: No link like a submodule, just a copy in a subdirectory
+##       advantage   : no link
+##       disadvantage: extra content in project
+
+git subtree add
+git subtree pull
+git subtree push
+git subtree merge
+git subtree split
+
+
 
 
 
